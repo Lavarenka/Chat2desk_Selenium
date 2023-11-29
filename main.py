@@ -14,16 +14,17 @@ with webdriver.Chrome() as browser:
     browser.find_element(By.CLASS_NAME, 'js-login-submit').click() # клацаем кнопку формы
     time.sleep(3)
     browser.get('https://web.chat2desk.com/chat/my?dialogID') # переходим по ссылке чатов
-
     time.sleep(10)
-    # browser.find_element(By.ID, 'macros-icon-wrapper').click()
-    # time.sleep(5)
     # browser.find_element(By.XPATH, '//div[@id="macroses-drop-down"]/div[3]')
     chat_items = browser.find_elements(By.CLASS_NAME, 'left-messages-container') # переходим на чаты
 
     count = 0 # счетчик
 
     def f(chat, count=0):
+        """
+        Проходися по чатам со счетчиком , почле обнавляем страницу и начинаем сначала,
+        если во время обработки чата , чат ичезает то ловит обработка исключений
+        """
         for i in chat:
             try:
                 i.click()
