@@ -6,25 +6,24 @@ from login_pass import *
 with webdriver.Chrome() as browser:
     browser.get('https://web.chat2desk.com/chat/')
     browser.maximize_window()
+    time.sleep(1) #пауза 1 сек
+    browser.find_element(By.CLASS_NAME, 'login-email').send_keys(my_login) # вводим логин
     time.sleep(1)
-    browser.find_element(By.CLASS_NAME, 'login-email').send_keys(my_login)
+    browser.find_element(By.CLASS_NAME, 'login-password').send_keys(my_pass) # вводим пароль
     time.sleep(1)
-    browser.find_element(By.CLASS_NAME, 'login-password').send_keys(my_pass)
-    time.sleep(1)
-    browser.find_element(By.CLASS_NAME, 'js-login-submit').click()
+    browser.find_element(By.CLASS_NAME, 'js-login-submit').click() # клацаем кнопку формы
     time.sleep(3)
-    browser.get('https://web.chat2desk.com/chat/my?dialogID')
+    browser.get('https://web.chat2desk.com/chat/my?dialogID') # переходим по ссылке чатов
 
-    # res = browser.get_cookies()
     time.sleep(10)
     # browser.find_element(By.ID, 'macros-icon-wrapper').click()
     # time.sleep(5)
     # browser.find_element(By.XPATH, '//div[@id="macroses-drop-down"]/div[3]')
-    chat_items = browser.find_elements(By.CLASS_NAME, 'left-messages-container')
+    chat_items = browser.find_elements(By.CLASS_NAME, 'left-messages-container') # переходим на чаты
 
-    c = 0
-    def f(chat, c = 0):
+    count = 0 # счетчик
 
+    def f(chat, count=0):
         for i in chat:
             try:
                 i.click()
@@ -32,17 +31,17 @@ with webdriver.Chrome() as browser:
                 browser.find_element(By.ID, 'macros-icon-wrapper').click()
                 time.sleep(1)
                 browser.find_element(By.ID, 'macros-icon-wrapper').click()
-
                 time.sleep(5)
-                c += 1
-                if c == 5:
+                count += 1
+                if count == 5:
                     browser.get('https://web.chat2desk.com/chat/my?dialogID')
                     time.sleep(5)
                     chat_items = browser.find_elements(By.CLASS_NAME, 'left-messages-container')
-                    return f(chat_items, c = 0)
+                    return f(chat_items, count=0) # рекурсия
             except:
                 time.sleep(1)
                 print('не удачная попытка')
                 continue
+
 
     f(chat_items)
